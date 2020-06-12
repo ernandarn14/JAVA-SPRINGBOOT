@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class EmployeeAddress {
 	@Id
@@ -19,10 +21,17 @@ public class EmployeeAddress {
 	
 	@OneToOne(mappedBy = "employeeAddress", fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE,
 			CascadeType.PERSIST, CascadeType.REFRESH }) //menunjukkan field apa yg berelasi
+	@JsonIgnore
 	private Employee employee;
 	
 	public int getId() {
 		return id;
+	}
+	public Employee getEmployee() {
+		return employee;
+	}
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 	public void setId(int id) {
 		this.id = id;
