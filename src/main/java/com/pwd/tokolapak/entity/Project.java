@@ -1,6 +1,6 @@
 package com.pwd.tokolapak.entity;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -8,12 +8,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Department {
+public class Project {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,29 +25,39 @@ public class Department {
 		return id;
 	}
 
+
 	public void setId(int id) {
 		this.id = id;
 	}
 
-	private String name;
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "department", cascade = {CascadeType.ALL})
-	@JsonIgnore
-	private Set<Employee> employees; // set -> agar data array unik
 
 	public String getName() {
 		return name;
 	}
 
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public Set<Employee> getEmployees() {
+
+	public List<Employee> getEmployees() {
 		return employees;
 	}
 
-	public void setEmployees(Set<Employee> employees) {
+
+	public void setEmployees(List<Employee> employees) {
 		this.employees = employees;
 	}
+
+
+	private String name;
+
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH })
+	@JsonIgnore
+	@JoinTable(name = "project_employee", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "employee_id"))
+	private List<Employee> employees;
+	
 }

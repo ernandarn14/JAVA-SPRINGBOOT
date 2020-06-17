@@ -10,7 +10,8 @@ public interface EmployeeService {
 	public Optional<Employee> getEmployeeById(int id);
 	public Employee addEmployee(Employee employee);
 	public Employee updateEmployee(Employee employee);
-	public Employee updateNullEmployeeAddress(Employee employee);
+//	public Employee updateNullEmployeeAddress(Employee employee);
+	public Employee updateNullEmployeeAddress(int addressId, int employeeId);
 	public void deleteEmployee(int id);
 	
 	public Iterable<EmployeeAddress> getEmployeeAddress();

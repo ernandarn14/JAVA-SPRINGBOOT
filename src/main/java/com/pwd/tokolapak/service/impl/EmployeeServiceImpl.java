@@ -90,16 +90,29 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	
-	@Override
-	@Transactional
-	public Employee updateNullEmployeeAddress(Employee employee) {
-		// TODO Auto-generated method stub
-		employee.getEmployeeAddress();
+//	@Override
+//	@Transactional
+//	public Employee updateNullEmployeeAddress(Employee employee) {
+//		// TODO Auto-generated method stub
+//		employee.getEmployeeAddress();
+//		
+//		if (employee.getEmployeeAddress() == null)
+//			employeeRepo.save(employee);
+//		
+//		return employeeRepo.save(employee);
+//	}
+	public Employee updateNullEmployeeAddress(int addressId, int employeeId) {
+		Employee findEmployee = employeeRepo.findById(employeeId).get();
 		
-		if (employee.getEmployeeAddress() == null)
-			employeeRepo.save(employee);
+		if (findEmployee == null)
+			throw new RuntimeException("Employee Not Found");
 		
-		return employeeRepo.save(employee);
+		EmployeeAddress findAddress = employeeAddressRepo.findById(addressId).get();
+		if (findAddress == null)
+			throw new RuntimeException("Employee Address Not Found");
+		
+		findEmployee.setEmployeeAddress(findAddress);
+		return employeeRepo.save(findEmployee);
 	}
 
 
