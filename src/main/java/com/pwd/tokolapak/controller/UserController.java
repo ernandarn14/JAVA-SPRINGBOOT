@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ public class UserController {
 	@Autowired 
 	private EmailUtil emailUtil;
 	
+	
 	@PostMapping
 	public User registerUser(@RequestBody User user) {
 		String encodedPassword = pwEncoder.encode(user.getPassword());
@@ -37,8 +39,24 @@ public class UserController {
 		user.setPassword(encodedPassword);
 		
 		User savedUser = userRepo.save(user);
-		savedUser.setPassword(null);
+//		savedUser.setPassword(null);
+		
+		emailUtil.sendEmail(user.getEmail(), "Registrasi Karyawan", "<h1>Selamat!</h1>\n Anda telah bergabung bersama kami!\n Klik <a href=\"http://localhost:8080/users/confirm-user/"+user.getEmail()+"\">link</a> ini untuk verifikasi email anda ");
 		return savedUser;
+	}
+	
+	@GetMapping("/confirm-user/{email}")
+	public String confirmUserAccount(@PathVariable String email) {
+		User findEmail = userRepo.findByEmail(email).get();
+		
+		if (findEmail != null) {
+			findEmail.setVerified(true);
+			userRepo.save(findEmail);
+	        return "accountVerified";
+		} else {
+			return "The link is invalid or broken!";
+		}
+		
 	}
 	
 	

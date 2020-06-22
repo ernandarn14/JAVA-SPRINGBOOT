@@ -8,5 +8,5 @@ import com.pwd.tokolapak.entity.User;
 
 public interface UserRepo extends JpaRepository<User, Integer> {
 	public Optional<User> findByUsername(String username);
-	 
+	public Optional<User> findByEmail(String email);
 }
