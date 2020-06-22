@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pwd.tokolapak.dao.UserRepo;
 import com.pwd.tokolapak.entity.User;
+import com.pwd.tokolapak.util.EmailUtil;
 
 @RestController
 @RequestMapping("/users")
@@ -25,6 +26,9 @@ public class UserController {
 	private UserRepo userRepo;
 	
 	private PasswordEncoder pwEncoder = new BCryptPasswordEncoder();
+	
+	@Autowired 
+	private EmailUtil emailUtil;
 	
 	@PostMapping
 	public User registerUser(@RequestBody User user) {
@@ -62,6 +66,12 @@ public class UserController {
 		} 
 		
 		return null;
+	}
+	
+	@PostMapping("/sendEmail")
+	public String sendEmailtesting() {
+		this.emailUtil.sendEmail("ernandarn@gmail.com", "Coba Email SpringBoot", "Haloo, \n Apa Kabar?");
+		return "Email Sent!";
 	}
 	
 }

@@ -42,8 +42,8 @@ public class ProductServiceImpl implements ProductService {
 	public Product updateProduct(Product product) {
 		Optional<Product> findProduct = productRepo.findById(product.getId());
 		
-		if(findProduct.toString() == "Optional.empty")
-			throw new RuntimeException("Product with id " + product.getId() + " doesn't exist");
+		if (findProduct.get() == null)
+			throw new RuntimeException("Product Not Found");
 		
 		return productRepo.save(product);
 	}
